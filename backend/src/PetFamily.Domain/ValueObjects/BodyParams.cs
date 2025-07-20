@@ -4,6 +4,9 @@ namespace PetFamily.Domain.ValueObjects;
 
 public record BodyParams
 {
+    //ef core
+    private BodyParams() { }
+    
     private BodyParams(double weight, double height)
     {
         Weight = weight;

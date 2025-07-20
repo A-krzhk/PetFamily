@@ -5,6 +5,9 @@ namespace PetFamily.Domain.ValueObjects;
 
 public record Vaccine
 {
+    //ef core
+    private Vaccine() { }
+    
     private Vaccine(string name, string description, DateTime date)
     {
         Name = name;

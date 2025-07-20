@@ -4,6 +4,9 @@ namespace PetFamily.Domain.ValueObjects;
 
 public record SocialMedia
 {
+    //ef core
+    private SocialMedia() { }
+    
     private SocialMedia(string name, string url)
     {
         Name = name;

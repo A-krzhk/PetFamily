@@ -10,12 +10,15 @@ public class Pet: Entity<Guid>
     private readonly List<PetHealthState> _healthStates = [];
     private readonly List<Vaccine> _vaccines = [];
     
+    //ef core
+    private Pet(Guid id): base(id)
+    {
+    }
+    
     private Pet(
         string name,
         string description,
         PetType petType,
-        PetBreed petBreed,
-        PetSpecies petSpecies,
         string color,
         Address address,
         BodyParams bodyParams,
@@ -28,8 +31,6 @@ public class Pet: Entity<Guid>
         Name = name;
         Description = description;
         PetType = petType;
-        PetBreed = petBreed;
-        PetSpecies = petSpecies;
         Color = color;
         Address = address;
         BodyParams = bodyParams;
@@ -45,10 +46,8 @@ public class Pet: Entity<Guid>
     public string Name { get; private set; }
     public string Description { get; private set; }
     public PetType PetType { get; private set; }
-    public PetBreed PetBreed { get; private set; }
-    public PetSpecies PetSpecies { get; private set; } 
     public string Color { get; private set; }
-    public IReadOnlyList<PetHealthState> HealthSatates => _healthStates;
+    public IReadOnlyList<PetHealthState> HealthStates => _healthStates;
     public IReadOnlyList<Vaccine>  Vaccines => _vaccines;
     public Address Address { get; private set; }
     public BodyParams BodyParams { get; private set; }
@@ -95,6 +94,4 @@ public class Pet: Entity<Guid>
         _vaccines.Remove(vaccine);
         return Result.Success();
     }
-    
-    
 }

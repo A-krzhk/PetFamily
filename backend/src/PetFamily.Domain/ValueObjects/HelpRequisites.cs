@@ -4,6 +4,9 @@ namespace PetFamily.Domain.ValueObjects;
 
 public record HelpRequisites
 {
+    //ef core
+    private HelpRequisites() { }
+    
     private HelpRequisites(
         string recipient, 
         string tin, 
@@ -11,8 +14,7 @@ public record HelpRequisites
         string rcrn,
         string rcbic,
         string acc,
-        string corAcc,
-        string bank)
+        string corAcc)
     {
         Recipient = recipient;
         TIN = tin;
@@ -21,7 +23,6 @@ public record HelpRequisites
         RCBIC = rcbic;
         Acc = acc;
         CorrAcc = corAcc;
-        Bank = bank;
     }
     
     public string Recipient { get; } // Получатель
@@ -31,7 +32,6 @@ public record HelpRequisites
     public string RCBIC { get; } // БИК
     public string Acc { get; } // Р/с 
     public string CorrAcc { get; } // К/с
-    public string Bank { get; }
 
     public Result<HelpRequisites, string> Create(
         string recipient, 
@@ -40,8 +40,7 @@ public record HelpRequisites
         string rcrn,
         string rcbic,
         string acc,
-        string corAcc,
-        string bank)
+        string corAcc)
     {
         if (string.IsNullOrWhiteSpace(recipient))
             return "Recipient can not be null";
@@ -57,8 +56,6 @@ public record HelpRequisites
             return "Acc can not be null";
         if (string.IsNullOrWhiteSpace(corAcc))
             return "CorAcc can not be null";
-        if (string.IsNullOrWhiteSpace(bank))
-            return "Bank can not be null";
-        return new HelpRequisites( recipient, tin, trrc, rcrn, rcbic, acc, corAcc, bank);
+        return new HelpRequisites( recipient, tin, trrc, rcrn, rcbic, acc, corAcc);
     }
 }
