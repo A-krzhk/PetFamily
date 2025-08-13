@@ -13,19 +13,22 @@ public class VolunteerConfiguration: IEntityTypeConfiguration<Volunteer>
         builder.ToTable("volunteers");
         builder.HasKey(v => v.Id).HasName("pk_volunteer");
         
-        builder.Property(v => v.FirstName)
-            .HasColumnName("first_name")
-            .HasMaxLength(Constants.SHORT_TEXT_MAX_LENGTH)
-            .IsRequired();
-            
-        builder.Property(v => v.LastName)
-            .HasColumnName("last_name")
-            .HasMaxLength(Constants.SHORT_TEXT_MAX_LENGTH)
-            .IsRequired();
-            
-        builder.Property(v => v.MiddleName)
-            .HasColumnName("middle_name")
-            .HasMaxLength(Constants.SHORT_TEXT_MAX_LENGTH);
+        builder.ComplexProperty(v => v.FullName, vb =>
+        {
+            vb.Property(n => n.FirstName)
+                .HasColumnName("first_name")
+                .HasMaxLength(Constants.SHORT_TEXT_MAX_LENGTH)
+                .IsRequired();
+
+            vb.Property(n => n.LastName)
+                .HasColumnName("last_name")
+                .HasMaxLength(Constants.SHORT_TEXT_MAX_LENGTH)
+                .IsRequired();
+
+            vb.Property(n => n.MiddleName)
+                .HasColumnName("middle_name")
+                .HasMaxLength(Constants.SHORT_TEXT_MAX_LENGTH);
+        });
             
         builder.OwnsOne(v => v.Email, vb =>
         {
@@ -41,19 +44,22 @@ public class VolunteerConfiguration: IEntityTypeConfiguration<Volunteer>
             .HasColumnName("work_experience")
             .IsRequired();
             
-        builder.OwnsOne(v => v.PhoneNumber, vb =>
+        builder.ComplexProperty(v => v.PhoneNumber, vb =>
         {
-            vb.ToJson("phone_number");
+            vb.Property(p => p.CountryCode)
+                .HasColumnName("country_code")
+                .IsRequired();
+            vb.Property(p => p.Number)
+                .HasColumnName("number")
+                .IsRequired();
         });
         
         builder.HasMany(v => v.Pets)
             .WithOne()
             .HasForeignKey("volunteer_id");
             
-        builder.OwnsOne(v => v.HelpRequisites, vb =>
+        builder.ComplexProperty(v => v.HelpRequisites, vb =>
         {
-            vb.ToJson("help_requisites");
-            
             vb.Property(p => p.Acc)
                 .HasColumnName("acc")
                 .IsRequired()

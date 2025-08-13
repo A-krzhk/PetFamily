@@ -29,9 +29,8 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
             .HasColumnName("description")
             .HasMaxLength(Constants.MEDIUM_TEXT_MAX_LENGTH);
         
-        builder.OwnsOne(p => p.PetType, pb =>
+        builder.ComplexProperty(p => p.PetType, pb =>
         {
-            pb.ToJson("pet_type");
             pb.Property(type => type.SpeciesId)
                 .HasColumnName("species_id")
                 .IsRequired();
@@ -63,9 +62,8 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
             .HasConversion<string>()
             .IsRequired();
         
-        builder.OwnsOne(p => p.Address, ab =>
+        builder.ComplexProperty(p => p.Address, ab =>
         {
-            ab.ToJson("address");
             ab.Property(a => a.City)
                 .HasColumnName("city")
                 .HasMaxLength(Constants.SHORT_TEXT_MAX_LENGTH)
@@ -82,9 +80,8 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
                 .IsRequired();
         });
         
-        builder.OwnsOne(p => p.BodyParams, bp =>
+        builder.ComplexProperty(p => p.BodyParams, bp =>
         {
-            bp.ToJson("body_params");
             bp.Property(p => p.Weight)
                 .HasColumnName("weight")
                 .IsRequired();
@@ -93,18 +90,18 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
                 .IsRequired();
         });
 
-        builder.OwnsOne(p => p.VolunteerPhoneNumber, vb =>
+        builder.ComplexProperty(p => p.VolunteerPhoneNumber, vb =>
         {
-            vb.ToJson("volunteer_phone_number");
+            vb.Property(p => p.CountryCode)
+                .HasColumnName("country_code")
+                .IsRequired();
             vb.Property(p => p.Number)
                 .HasColumnName("number")
                 .IsRequired();
         });
         
-        builder.OwnsOne(v => v.HelpRequisites, vb =>
+        builder.ComplexProperty(v => v.HelpRequisites, vb =>
         {
-            vb.ToJson("help_requisites");
-            
             vb.Property(p => p.Acc)
                 .HasColumnName("acc")
                 .IsRequired()

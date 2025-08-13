@@ -15,9 +15,7 @@ public class Volunteer: Entity<Guid>
     }
     
     private Volunteer(
-        string firstName,
-        string lastName,
-        string? middleName,
+        FullName fullName,
         Email email,
         string description,
         double workExperience,
@@ -25,9 +23,7 @@ public class Volunteer: Entity<Guid>
         HelpRequisites helpRequisites)
     {
         Id=Guid.NewGuid();
-        FirstName=firstName;
-        LastName=lastName;
-        MiddleName=middleName;
+        FullName=fullName;
         Email=email;
         Description=description;
         WorkExperience=workExperience;
@@ -36,9 +32,7 @@ public class Volunteer: Entity<Guid>
     }
     
     public Guid Id { get; private set; }
-    public string FirstName { get; private set; }
-    public string LastName { get; private set; }
-    public string? MiddleName { get; private set; }
+    public FullName FullName { get; private set; }
     public Email Email { get; private set; }
     public string Description { get; private set; }
     public double WorkExperience { get; private set; }
@@ -51,28 +45,18 @@ public class Volunteer: Entity<Guid>
     public IReadOnlyList<SocialMedia> SocialMedias => _socialMedias;
     
     public static Result<Volunteer, string> Create(
-        string firstName,
-        string lastName,
-        string? middleName,
+        FullName fullName,
         Email email,
         string description,
         double workExperience,
         PhoneNumber phoneNumber,
         HelpRequisites helpRequisites)
     {
-        if (string.IsNullOrWhiteSpace(firstName))
-            return "First name cannot be empty";
-
-        if (string.IsNullOrWhiteSpace(lastName))
-            return "Last name cannot be empty";
-
         if (workExperience < 0)
             return "Work experience cannot be negative";
 
         return new Volunteer(
-            firstName, 
-            lastName, 
-            middleName, 
+            fullName,
             email, 
             description, 
             workExperience, 
