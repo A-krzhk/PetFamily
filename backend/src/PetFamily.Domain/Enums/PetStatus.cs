@@ -3,6 +3,6 @@ namespace PetFamily.Domain.Enums;
 public enum PetStatus
 {
     LookingForHome,         // Ищет дом
-    Adopted,                // Найдён хозяин
+    Adopted,                // Найден хозяин
     Unknown                 // Неизвестно
 }

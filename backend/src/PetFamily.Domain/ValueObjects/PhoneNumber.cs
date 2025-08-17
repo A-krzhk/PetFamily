@@ -5,6 +5,9 @@ namespace PetFamily.Domain.ValueObjects;
 
 public record PhoneNumber
 {
+    //ef core
+    private PhoneNumber() { }
+    
     private PhoneNumber(string countryCode, string number)
     {
         CountryCode = countryCode;

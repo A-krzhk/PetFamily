@@ -4,6 +4,9 @@ namespace PetFamily.Domain.ValueObjects;
 
 public record PetType
 {
+    //ef core
+    private PetType() { }
+    
     private PetType(Guid breedId, Guid speciesId)
     {
         BreedId = breedId;

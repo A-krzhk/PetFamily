@@ -4,6 +4,9 @@ namespace PetFamily.Domain.ValueObjects;
 
 public record Address
 {
+    //ef core
+    private Address() { }
+    
     private Address(string region, string city, string street)
     {
         Region = region;
