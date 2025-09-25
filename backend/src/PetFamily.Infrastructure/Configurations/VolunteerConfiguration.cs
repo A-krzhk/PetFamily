@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Microsoft.VisualBasic;
 using PetFamily.Domain.Entities;
 using Constants = PetFamily.Domain.Shared.Constants;
 
@@ -58,8 +57,10 @@ public class VolunteerConfiguration: IEntityTypeConfiguration<Volunteer>
             .WithOne()
             .HasForeignKey("volunteer_id");
             
-        builder.ComplexProperty(v => v.HelpRequisites, vb =>
+        builder.OwnsMany(v => v.HelpRequisites, vb =>
         {
+            vb.ToJson("help_requisites");
+            
             vb.Property(p => p.Acc)
                 .HasColumnName("acc")
                 .IsRequired()

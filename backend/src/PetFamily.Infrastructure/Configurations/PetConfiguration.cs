@@ -6,6 +6,7 @@ using PetFamily.Domain.Shared;
 using PetFamily.Domain.ValueObjects;
 using System.Text.Json; 
 using System.Text.Json.Serialization;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace PetFamily.Infrastructure.Configurations;
 
@@ -163,6 +164,7 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
             .HasColumnName("health_states")
             .HasConversion(
                 v => JsonSerializer.Serialize(v, jsonOptions),
-                v => JsonSerializer.Deserialize<IReadOnlyList<PetHealthState>>(v, jsonOptions) ?? new List<PetHealthState>());
+                v => JsonSerializer.Deserialize<IReadOnlyList<PetHealthState>>(v, jsonOptions) ?? new List<PetHealthState>(),
+                ValueComparer.CreateDefault(typeof(IReadOnlyList<PetHealthState>), favorStructuralComparisons: true));
     }
 }

@@ -1,4 +1,5 @@
 using CSharpFunctionalExtensions;
+using PetFamily.Domain.Shared;
 
 namespace PetFamily.Domain.ValueObjects;
 
@@ -16,12 +17,12 @@ public record PetType
     public Guid BreedId { get; }
     public Guid SpeciesId { get; }
 
-    public Result<PetType, string> Create(Guid breedId, Guid speciesId)
+    public Result<PetType, Error> Create(Guid breedId, Guid speciesId)
     {
         if (breedId == null)
-            return "Breed Id cannot be null";
+            return Errors.General.ValueIsRequired("breed id");
         if (speciesId == null)
-            return "Species Id cannot be null";
+            return Errors.General.ValueIsRequired("species Id");
 
         return new PetType(breedId, speciesId);
     }
