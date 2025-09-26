@@ -1,5 +1,6 @@
 using CSharpFunctionalExtensions;
 using PetFamily.Domain.Enums;
+using PetFamily.Domain.Shared;
 using PetFamily.Domain.ValueObjects;
 
 namespace PetFamily.Domain.Entities;
@@ -8,6 +9,7 @@ public class Volunteer: Entity<Guid>
 {
     private readonly List<Pet> _pets = [];
     private readonly List<SocialMedia> _socialMedias = [];
+    private readonly List<HelpRequisites> _helpRequisites = [];
     
     //ef core
     private Volunteer(Guid id) : base(id)
@@ -19,8 +21,7 @@ public class Volunteer: Entity<Guid>
         Email email,
         string description,
         double workExperience,
-        PhoneNumber phoneNumber,
-        HelpRequisites helpRequisites)
+        PhoneNumber phoneNumber)
     {
         Id=Guid.NewGuid();
         FullName=fullName;
@@ -28,7 +29,6 @@ public class Volunteer: Entity<Guid>
         Description=description;
         WorkExperience=workExperience;
         PhoneNumber=phoneNumber;
-        HelpRequisites=helpRequisites;
     }
     
     public Guid Id { get; private set; }
@@ -41,27 +41,25 @@ public class Volunteer: Entity<Guid>
     public int AdoptedPetCount => _pets.Count(p => p.Status.Equals(PetStatus.Adopted));
     public int LookingForHomePetCount => _pets.Count(p => p.Status.Equals(PetStatus.LookingForHome));
     public int SickPetCount => _pets.Count(p => p.HealthStates.Contains(PetHealthState.Sick));
-    public HelpRequisites HelpRequisites { get; private set; }
+    public IReadOnlyList<HelpRequisites> HelpRequisites => _helpRequisites;
     public IReadOnlyList<SocialMedia> SocialMedias => _socialMedias;
     
-    public static Result<Volunteer, string> Create(
+    public static Result<Volunteer, Error> Create(
         FullName fullName,
         Email email,
         string description,
         double workExperience,
-        PhoneNumber phoneNumber,
-        HelpRequisites helpRequisites)
+        PhoneNumber phoneNumber)
     {
         if (workExperience < 0)
-            return "Work experience cannot be negative";
+            return Errors.General.ValueIsInvalid($"work experience {workExperience}");
 
         return new Volunteer(
             fullName,
             email, 
             description, 
             workExperience, 
-            phoneNumber, 
-            helpRequisites);
+            phoneNumber);
     }
 
     public Result AddPet(Pet pet)
@@ -97,6 +95,24 @@ public class Volunteer: Entity<Guid>
             return Result.Failure("Social media cannot be null");
 
         _socialMedias.Remove(socialMedia);
+        return Result.Success();
+    }
+    
+    public Result AddHelpRequisite(HelpRequisites helpRequisites)
+    {
+        if (_helpRequisites.Contains(helpRequisites))
+            return Result.Failure("Help Requisites already exists");
+            
+        _helpRequisites.Add(helpRequisites);
+        return Result.Success();
+    }
+
+    public Result RemoveHelpRequisite(HelpRequisites helpRequisites)
+    {
+        if (_helpRequisites.Contains(helpRequisites))
+            return Result.Failure("Help Requisites do not exists");
+
+        _helpRequisites.Remove(helpRequisites);
         return Result.Success();
     }
 }

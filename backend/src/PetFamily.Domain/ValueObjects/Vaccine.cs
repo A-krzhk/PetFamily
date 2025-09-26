@@ -1,5 +1,6 @@
 using CSharpFunctionalExtensions;
 using PetFamily.Domain.Enums;
+using PetFamily.Domain.Shared;
 
 namespace PetFamily.Domain.ValueObjects;
 
@@ -19,14 +20,14 @@ public record Vaccine
     public string Description { get; }
     public DateTime Date { get; }
 
-    public Result<Vaccine, string> Create(string name, string description, DateTime date)
+    public Result<Vaccine, Error> Create(string name, string description, DateTime date)
     {
-        if (string.IsNullOrWhiteSpace(Name))
-            return "Name can not be empty or null";
-        if (string.IsNullOrWhiteSpace(Description))
-            return "Description can not be empty or null";
-        if (Date == default)
-            return "Date can not be empty";
+        if (string.IsNullOrWhiteSpace(name))
+            Errors.General.ValueIsRequired(nameof(name));
+        if (string.IsNullOrWhiteSpace(description))
+            Errors.General.ValueIsRequired(nameof(description));
+        if (date == default)
+            Errors.General.ValueIsRequired(nameof(date));
 
         return new Vaccine(name, description, date);
     }

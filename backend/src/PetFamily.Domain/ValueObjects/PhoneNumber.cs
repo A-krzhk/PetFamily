@@ -1,5 +1,6 @@
 using System.Text.RegularExpressions;
 using CSharpFunctionalExtensions;
+using PetFamily.Domain.Shared;
 
 namespace PetFamily.Domain.ValueObjects;
 
@@ -17,20 +18,20 @@ public record PhoneNumber
     public string CountryCode { get; }
     public string Number { get; }
 
-    public Result<PhoneNumber, string> Create(string countryCode, string number)
+    public static Result<PhoneNumber, Error> Create(string countryCode, string number)
     {
         if (string.IsNullOrWhiteSpace(countryCode))
-            return "Country code can not be null or empty";
+            return Errors.General.ValueIsRequired("country code");
         if (string.IsNullOrWhiteSpace(number))
-            return "Number can not be null or empty";
+            return Errors.General.ValueIsRequired("phone-number");
         
         var countryCodePattern = @"^\+\d{1,3}$";
         var numberPattern = @"^\d{7,15}$";
 
         if (!Regex.IsMatch(countryCode, countryCodePattern))
-            return "Invalid country code format. Expected format: +123";
+            return Errors.General.ValueIsInvalid("country code");
         if (!Regex.IsMatch(number, numberPattern))
-            return "Invalid number format. Expected 7 to 15 digits";
+            return Errors.General.ValueIsInvalid("phone-number (Expected 7 to 15 digits)");
         
         return new PhoneNumber(countryCode, number);
     }

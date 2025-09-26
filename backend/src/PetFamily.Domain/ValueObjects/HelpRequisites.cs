@@ -1,4 +1,5 @@
 using CSharpFunctionalExtensions;
+using PetFamily.Domain.Shared;
 
 namespace PetFamily.Domain.ValueObjects;
 
@@ -33,7 +34,7 @@ public record HelpRequisites
     public string Acc { get; } // Р/с 
     public string CorrAcc { get; } // К/с
 
-    public Result<HelpRequisites, string> Create(
+    public static Result<HelpRequisites, Error> Create(
         string recipient, 
         string tin, 
         string trrc,
@@ -43,19 +44,19 @@ public record HelpRequisites
         string corAcc)
     {
         if (string.IsNullOrWhiteSpace(recipient))
-            return "Recipient can not be null";
+            return Errors.General.ValueIsRequired(nameof(recipient));
         if (string.IsNullOrWhiteSpace(tin))
-            return "TIN can not be null";
+            return Errors.General.ValueIsRequired(nameof(tin));
         if (string.IsNullOrWhiteSpace(trrc))
-            return "TRRC can not be null";
+            return Errors.General.ValueIsRequired(nameof(trrc));
         if (string.IsNullOrWhiteSpace(rcrn))
-            return "RCRN can not be null";
+            return Errors.General.ValueIsRequired(nameof(rcrn));
         if (string.IsNullOrWhiteSpace(rcbic))
-            return "RCBIC can not be null";
+            return Errors.General.ValueIsRequired(nameof(rcbic));
         if (string.IsNullOrWhiteSpace(acc))
-            return "Acc can not be null";
+            return Errors.General.ValueIsRequired(nameof(acc));
         if (string.IsNullOrWhiteSpace(corAcc))
-            return "CorAcc can not be null";
-        return new HelpRequisites( recipient, tin, trrc, rcrn, rcbic, acc, corAcc);
+            return Errors.General.ValueIsRequired(nameof(corAcc));
+        return new HelpRequisites(recipient, tin, trrc, rcrn, rcbic, acc, corAcc);
     }
 }
