@@ -15,7 +15,8 @@ public class VolunteersController : ApplicationController
         [FromBody] CreateVolunteerRequest request,
         CancellationToken cancellationToken = default)
     {
-        var result = await handler.HandleAsync(request, cancellationToken);
+        var command = new CreateVolunteerCommand(request);
+        var result = await handler.HandleAsync(command, cancellationToken);
         
         if (result.IsFailure)
             return result.Error.ToResponse();

@@ -34,7 +34,7 @@ public record HelpRequisites
     public string Acc { get; } // Р/с 
     public string CorrAcc { get; } // К/с
 
-    public Result<HelpRequisites, Error> Create(
+    public static Result<HelpRequisites, Error> Create(
         string recipient, 
         string tin, 
         string trrc,

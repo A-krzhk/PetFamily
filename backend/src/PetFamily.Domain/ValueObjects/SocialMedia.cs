@@ -17,7 +17,7 @@ public record SocialMedia
     public string Name { get; }
     public string Url { get; }
 
-    public Result<SocialMedia, Error> Create(string name, string url)
+    public static Result<SocialMedia, Error> Create(string name, string url)
     {
         if (string.IsNullOrWhiteSpace(name))
             return Errors.General.ValueIsRequired(nameof(name));
